@@ -1,19 +1,19 @@
-# ❤️ Heart Failure Prediction Project
+# Heart Failure Prediction Project
 
 A machine learning project to predict the risk of heart failure using patient data like age, BMI, blood pressure, and more.
 
-📊 **Dataset**:  
+**Dataset**:  
 [Heart Failure Prediction – Kaggle](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction)
 
 ---
 
-## 🔧 Project Status
+## Project Status
 
 Currently in the **training phase**. Data preprocessing, analysis, and model building are in progress.
 
 ---
 
-## 📁 Planned Steps
+## Planned Steps
 
 - Data cleaning & preprocessing  
 - Exploratory data analysis (EDA)  
@@ -23,7 +23,7 @@ Currently in the **training phase**. Data preprocessing, analysis, and model bui
 
 ---
 
-## 🛠 Tools & Libraries
+## Tools & Libraries
 
 - Python, Pandas, NumPy  
 - Scikit-learn, Seaborn, Matplotlib  
