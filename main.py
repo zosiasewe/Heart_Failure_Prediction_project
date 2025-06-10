@@ -1,3 +1,7 @@
+# This project is based on a kaggle data set of Heart Failure Prediction
+# Done by Zofia Sewerynska
+# 05.2025, Poland
+
 import os
 import zipfile
 #---------------------------------------------------------------------------------
