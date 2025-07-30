@@ -11,6 +11,10 @@ import numpy as np
 import math
 from sklearn.preprocessing import StandardScaler
 import statistics
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+
 #---------------------------------------------------------------------------------
 # kaggle data zip
 # os.environ['KAGGLE_CONFIG_DIR'] = r'C:\Users\zosia\.kaggle'
@@ -79,20 +83,67 @@ print(max(df["Cholesterol"]))
 
 
 #Box ploty dla numeric data:
-f, axes = plt.subplots(1,2,figsize = (14,10))
-data_for_boxplot = ["Oldpeak", "MaxHR"]
-for i in range(2):
-    col = i % 2  # 0 or 1
-    sns.boxplot(data=df, x="HeartDisease", y=data_for_boxplot[i],  ax=axes[ col])
-    axes[col].set_title(f"{data_for_boxplot[i]} by Heart Disease")
-plt.show()
+data_for_boxplot = ["Oldpeak", "MaxHR", "Cholesterol", "Age"]
+f, axes = plt.subplots(1,len(data_for_boxplot),figsize = (14,10))
+for i in range(len(data_for_boxplot)):
+    sns.boxplot(data=df, x="HeartDisease", y=data_for_boxplot[i],  ax=axes[i], color = 'plum')
+    axes[i].set_title(f"{data_for_boxplot[i]} by Heart Disease")
+    axes[i].set_xticks([0, 1])
+    axes[i].set_xticklabels(['No', 'Yes'])
+# plt.show()
 
 #Count ploty dla binary data
-f, axes = plt.subplots(1,2,figsize = (14,10))
 data_for_countplot = ["ExerciseAngina", "Sex"]
-for i in range(2):
-    col = i % 2  # 0 or 1
-    sns.countplot(data=df, x="HeartDisease", hue=data_for_countplot[i],  ax=axes[ col])
-    axes[col].set_title(f"{data_for_countplot[i]} by Heart Disease")
+f, axes = plt.subplots(1,len(data_for_countplot),figsize = (14,10))
+for i in range(len(data_for_countplot)):
+    sns.countplot(data=df, x="HeartDisease", hue=data_for_countplot[i],  ax=axes[i], palette = 'flare')
+    axes[i].set_title(f"{data_for_countplot[i]} by Heart Disease")
+    if data_for_countplot[i] == "ExerciseAngina":
+        axes[i].legend(['No', 'Yes'])
+    if data_for_countplot[i] == "Sex":
+        axes[i].legend(['Male', 'Female'])
+    axes[i].set_xticks([0, 1])
+    axes[i].set_xticklabels(['No', 'Yes'])
+# plt.show()
+
+
+# Important features
+selected_features = df[['ST_Slope_Flat', 'ST_Slope_Up', 'Sex', 'Age', 'MaxHR', 'Oldpeak', 'ExerciseAngina', 'ChestPainType_TA', 'ChestPainType_ATA', 'ChestPainType_NAP']]
+selected_y = df['HeartDisease']
+
+df_to_classify = selected_features
+X_train, X_test, y_train, y_test = train_test_split(df_to_classify, selected_y, test_size = 0.2, random_state = 42)
+
+# All features
+df_full = df
+X_train_all, X_test_all, y_train_all, y_test_all = train_test_split(df_full, selected_y, test_size = 0.2, random_state = 42)
+
+# Simple Linear Regression
+
+reg = LinearRegression()
+reg.fit(X_train, y_train)
+# regression coefficients
+print('Coefficients: ', reg.coef_)
+# variance score: 1 means perfect prediction
+print('Variance score: {}'.format(reg.score(X_test, y_test)))
+
+y_train_pred = reg.predict(X_train)
+y_test_pred = reg.predict(X_test)
+
+plt.figure(figsize = (14,10))
+plt.scatter(y_train_pred,
+            y_train_pred - y_train,
+            color="green", s=10,
+            label='Train data')
+
+plt.scatter(y_test_pred,
+            y_test_pred - y_test,
+            color="blue", s=10,
+            label='Test data')
+
+plt.hlines(y=0, xmin=0, xmax=50, linewidth=2)
+plt.legend(loc='upper right')
+plt.title("Residual errors")
 plt.show()
-#split train classify etc
+
+
