@@ -12,7 +12,11 @@ import math
 from sklearn.preprocessing import StandardScaler
 import statistics
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+
 
 
 #---------------------------------------------------------------------------------
@@ -118,32 +122,33 @@ X_train, X_test, y_train, y_test = train_test_split(df_to_classify, selected_y, 
 df_full = df
 X_train_all, X_test_all, y_train_all, y_test_all = train_test_split(df_full, selected_y, test_size = 0.2, random_state = 42)
 
-# Simple Linear Regression
-
-reg = LinearRegression()
-reg.fit(X_train, y_train)
-# regression coefficients
-print('Coefficients: ', reg.coef_)
-# variance score: 1 means perfect prediction
-print('Variance score: {}'.format(reg.score(X_test, y_test)))
-
-y_train_pred = reg.predict(X_train)
-y_test_pred = reg.predict(X_test)
-
-plt.figure(figsize = (14,10))
-plt.scatter(y_train_pred,
-            y_train_pred - y_train,
-            color="green", s=10,
-            label='Train data')
-
-plt.scatter(y_test_pred,
-            y_test_pred - y_test,
-            color="blue", s=10,
-            label='Test data')
-
-plt.hlines(y=0, xmin=0, xmax=50, linewidth=2)
-plt.legend(loc='upper right')
-plt.title("Residual errors")
-plt.show()
 
 
+# Logistic Regression
+lr_classifier = LogisticRegression(max_iter=1000)
+lr_classifier.fit(X_train, y_train)
+
+y_pred = lr_classifier.predict(X_test)
+
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+
+# Random Forest
+rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_classifier.fit(X_train, y_train)
+y_pred_2 = rf_classifier.predict(X_test)
+
+print(confusion_matrix(y_test, y_pred_2))
+print(classification_report(y_test, y_pred_2))
+
+
+# SVM
+svm_classifier = SVC(kernel='linear', C=1.0, random_state=42)
+svm_classifier.fit(X_train, y_train)
+y_pred_3 = svm_classifier.predict(X_test)
+
+print(confusion_matrix(y_test, y_pred_3))
+print(classification_report(y_test, y_pred_3))
+
+#Feature importance
