@@ -1,5 +1,9 @@
 # Heart Failure Prediction Project
 
+Author
+Zofia Seweryńska
+Project completed for SKN Data Science
+
 A comprehensive machine learning project for predicting heart disease risk using clinical patient data. This project analyzes 11 key clinical features to identify patients at risk of cardiovascular disease, achieving 85.9% accuracy with logistic regression.
 
 ## Dataset
